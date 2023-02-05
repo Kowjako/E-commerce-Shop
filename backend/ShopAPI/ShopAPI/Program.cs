@@ -1,6 +1,7 @@
 using Core.Interface;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
+using Infrastructure.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +39,7 @@ var logger = services.GetRequiredService<ILogger<Program>>();
 try
 {
     await context.Database.MigrateAsync();
+    await StoreContextSeeder.SeedDataAsync(context);
 }
 catch (Exception ex)
 {

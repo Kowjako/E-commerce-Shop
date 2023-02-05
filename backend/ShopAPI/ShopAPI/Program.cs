@@ -18,6 +18,7 @@ builder.Services.AddDbContext<StoreContext>(p =>
     p.UseSqlite(builder.Configuration.GetConnectionString("Default"));
 });
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 

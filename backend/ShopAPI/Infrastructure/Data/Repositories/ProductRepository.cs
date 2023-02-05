@@ -17,11 +17,13 @@ namespace Infrastructure.Data.Repositories
             => await _dbContext.Products.Include(p => p.ProductBrand)
                                         .Include(p => p.ProductType)
                                         .FirstOrDefaultAsync(p => p.Id == id);
-        
+
         public async Task<IReadOnlyList<Product>> GetProductsAsync()
-            => await _dbContext.Products.Include(p => p.ProductBrand)
+        {
+            return await _dbContext.Products.Include(p => p.ProductBrand)
                                         .Include(p => p.ProductType)
                                         .ToListAsync();
+        }
         
         public async Task<IReadOnlyList<ProductType>> GetProductTypesAsync()
             => await _dbContext.ProductTypes.ToListAsync();

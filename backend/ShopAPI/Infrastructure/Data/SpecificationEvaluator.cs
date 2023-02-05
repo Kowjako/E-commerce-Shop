@@ -10,14 +10,12 @@ namespace Infrastructure.Data
         {
             var query = entityQuery;
 
-            if(spec.Criteria != null)
+            if (spec.Criteria != null)
             {
                 query = query.Where(spec.Criteria);
             }
 
-            query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
-
-            return query;
+            return spec.Includes.Aggregate(query, (current, include) => current.Include(include));
         }
     }
 }

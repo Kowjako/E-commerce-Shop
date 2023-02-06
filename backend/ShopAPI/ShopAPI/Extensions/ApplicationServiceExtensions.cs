@@ -38,6 +38,16 @@ namespace ShopAPI.Extensions
                 };
             });
 
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .WithOrigins("https://localhost:4200");
+                });
+            });
+
             return services;
         }
     }

@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
 // Our API will serve images inside wwwroot/images since our Products
 // PictureUrl are referenced to them
 app.UseStaticFiles();
-
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 app.MapControllers();
 

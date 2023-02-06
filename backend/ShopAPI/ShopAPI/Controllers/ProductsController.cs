@@ -2,9 +2,11 @@
 using Core.Entities;
 using Core.Interface;
 using Core.Specifications.Concrete;
+using Core.Specifications.Params;
 using Microsoft.AspNetCore.Mvc;
 using ShopAPI.DTO;
 using ShopAPI.Errors;
+using ShopAPI.Helpers;
 
 namespace ShopAPI.Controllers
 {
@@ -25,10 +27,22 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductDTO>>> GetProducts([FromQuery] string sort, [FromQuery] int? brandId, [FromQuery] int? typeId)
+        public async Task<ActionResult<Pagination<ProductDTO>>> GetProducts([FromQuery]ProductsSpecParams @params)
         {
-            var products = await _repo.GetAllWithSpecAsync(new ProductsWithTypesAndBrandsSpec(sort, brandId, typeId));
-            return Ok(_mapper.Map<IReadOnlyList<ProductDTO>>(products));
+            var products = await _repo.GetAllWithSpecAsync(new ProductsWithTypesAndBrandsSpec(@params));
+            var count = await _repo.CountAsync(new ProductsWithFiltersForCountSpec(@params));
+
+            var data = _mapper.Map<IReadOnlyList<ProductDTO>>(products);
+
+            var paginationResult = new Pagination<ProductDTO>
+            {
+                Count = count,
+                Data = data,
+                PageSize = @params.PageSize,
+                PageIndex = @params.PageIndex
+            };
+
+            return Ok(paginationResult);
         }
 
         [HttpGet("{id}")]

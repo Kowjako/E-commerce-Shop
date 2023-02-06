@@ -1,22 +1,24 @@
 ﻿using Core.Entities;
+using Core.Specifications.Params;
 
 namespace Core.Specifications.Concrete
 {
     public class ProductsWithTypesAndBrandsSpec : BaseSpecification<Product>
     {
-        public ProductsWithTypesAndBrandsSpec(string sort, int? brandId, int? typeId) 
+        public ProductsWithTypesAndBrandsSpec(ProductsSpecParams @params) 
             :base(x =>
-                (!brandId.HasValue || x.ProductBrandId == brandId) &&
-                (!typeId.HasValue || x.ProductTypeId == typeId)
+                (!@params.BrandId.HasValue || x.ProductBrandId == @params.BrandId) &&
+                (!@params.TypeId.HasValue || x.ProductTypeId == @params.TypeId)
             )
         {
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);
             AddOrderBy(x => x.Name);
+            ApplyPaging(@params.PageSize * (@params.PageIndex - 1), @params.PageSize);
 
-            if(!string.IsNullOrEmpty(sort))
+            if(!string.IsNullOrEmpty(@params.Sort))
             {
-                switch(sort)
+                switch(@params.Sort)
                 {
                     case "priceAsc":
                         AddOrderBy(p => p.Price);

@@ -23,9 +23,13 @@ namespace Infrastructure.Data.Repositories
         public async Task<T> GetEntityWithSpecAsync(ISpecification<T> spec)
             => await ApplySpecification(spec).FirstOrDefaultAsync();
 
+        public async Task<int> CountAsync(ISpecification<T> spec)
+            => await ApplySpecification(spec).CountAsync();
+
         public IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
         }
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ShopAPI.Errors
 {
-    public class ApiException : ApiResponse
+    public sealed class ApiException : ApiResponse
     {
         public string Details { get; set; }
 
@@ -9,7 +9,5 @@
         {
             Details = details;
         }
-
-
     }
 }

@@ -34,7 +34,7 @@ namespace ShopAPI.Middlewares
                     ? new ApiException(ex.Message, ex.StackTrace.ToString())
                     : new ApiException("Server error was occured");
 
-                var json = JsonSerializer.Serialize(response, options: new JsonSerializerOptions()
+                var json = JsonSerializer.Serialize(response, new JsonSerializerOptions()
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });

@@ -4,7 +4,7 @@ using ShopAPI.Errors;
 namespace ShopAPI.Controllers
 {
     [Route("fallback/{code}")]
-    [ApiExplorerSettings(IgnoreApi = true)]
+    [ApiExplorerSettings(IgnoreApi = true)] //disable Swagger for this controller
     public class FallbackController : BaseApiController
     {
         public IActionResult FallbackError([FromRoute]int code)

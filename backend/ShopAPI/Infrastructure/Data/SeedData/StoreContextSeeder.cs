@@ -1,11 +1,14 @@
 ﻿using Core.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace Infrastructure.Data.SeedData
 {
     public class StoreContextSeeder
     {
-        public static async Task SeedDataAsync(StoreContext context)
+        private static async Task SeedDataAsyncInternal(StoreContext context)
         {
             if (!context.ProductBrand.Any())
             {
@@ -31,6 +34,22 @@ namespace Infrastructure.Data.SeedData
             if (context.ChangeTracker.HasChanges())
             {
                 await context.SaveChangesAsync();
+            }
+        }
+
+        public static async Task SeedDataAsync(IServiceScope scope)
+        {
+            var services = scope.ServiceProvider;
+            var context = services.GetRequiredService<StoreContext>();
+            var logger = services.GetRequiredService<ILogger<StoreContextSeeder>>();
+            try
+            {
+                await context.Database.MigrateAsync();
+                await SeedDataAsyncInternal(context);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occured during migration");
             }
         }
     }

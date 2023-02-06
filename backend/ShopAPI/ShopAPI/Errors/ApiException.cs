@@ -4,8 +4,8 @@
     {
         public string Details { get; set; }
 
-        public ApiException(int statusCode, string message = null, string details = null)
-            : base(statusCode, message)
+        public ApiException(string message = null, string details = null)
+            : base(500, message)
         {
             Details = details;
         }

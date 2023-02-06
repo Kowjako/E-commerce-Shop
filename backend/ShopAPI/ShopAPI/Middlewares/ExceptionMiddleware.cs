@@ -31,14 +31,14 @@ namespace ShopAPI.Middlewares
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var response = _env.IsDevelopment()
-                    ? new ApiException((int)HttpStatusCode.InternalServerError, ex.Message,
-                        ex.StackTrace.ToString())
-                    : new ApiException((int)HttpStatusCode.InternalServerError);
+                    ? new ApiException(ex.Message, ex.StackTrace.ToString())
+                    : new ApiException("Server error was occured");
 
                 var json = JsonSerializer.Serialize(response, options: new JsonSerializerOptions()
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
+
                 await context.Response.WriteAsync(json);
             }
         }

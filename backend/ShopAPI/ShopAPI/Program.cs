@@ -1,6 +1,4 @@
-using Infrastructure.Data;
 using Infrastructure.Data.SeedData;
-using Microsoft.EntityFrameworkCore;
 using ShopAPI.Extensions;
 using ShopAPI.Middlewares;
 

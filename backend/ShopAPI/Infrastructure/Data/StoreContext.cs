@@ -6,11 +6,8 @@ namespace Infrastructure.Data
 {
     public class StoreContext : DbContext
     {
-        public StoreContext(DbContextOptions context) 
-            : base(context)
-        {
-
-        }
+        public StoreContext(DbContextOptions context)
+            : base(context) { }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
@@ -22,6 +19,12 @@ namespace Infrastructure.Data
 
             // Pick config from EntityTypeBuilder
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            // Since SQLite doesnt support sorting by decimal
+            if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+            {
+                modelBuilder.Entity<Product>().Property(x => x.Price).HasConversion<double>();
+            }
         }
     }
 }

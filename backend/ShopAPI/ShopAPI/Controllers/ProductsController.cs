@@ -25,9 +25,9 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductDTO>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductDTO>>> GetProducts([FromQuery] string sort, [FromQuery] int? brandId, [FromQuery] int? typeId)
         {
-            var products = await _repo.GetAllWithSpecAsync(new ProductsWithTypesAndBrandsSpec());
+            var products = await _repo.GetAllWithSpecAsync(new ProductsWithTypesAndBrandsSpec(sort, brandId, typeId));
             return Ok(_mapper.Map<IReadOnlyList<ProductDTO>>(products));
         }
 

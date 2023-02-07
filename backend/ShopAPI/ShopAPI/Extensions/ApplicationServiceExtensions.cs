@@ -19,6 +19,7 @@ namespace ShopAPI.Extensions
             {
                 p.UseSqlite(config.GetConnectionString("Default"));
             });
+
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
@@ -40,11 +41,11 @@ namespace ShopAPI.Extensions
 
             services.AddCors(opt =>
             {
-                opt.AddPolicy("CorsPolicy", builder =>
+                opt.AddPolicy("CORS", builder =>
                 {
-                    builder.AllowAnyHeader()
-                           .AllowAnyMethod()
-                           .WithOrigins("https://localhost:4200");
+                    builder.WithOrigins("https://localhost:4200")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
                 });
             });
 

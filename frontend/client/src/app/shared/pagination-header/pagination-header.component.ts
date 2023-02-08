@@ -5,8 +5,8 @@ import { Component, Input } from '@angular/core';
   templateUrl: './pagination-header.component.html',
   styleUrls: ['./pagination-header.component.scss']
 })
-export class PaginationHeaderComponent {
+export class PaginationHeaderComponent{
   @Input() pageNumber?: number;
   @Input() pageSize?: number;
-  @Input() totalCount?: number;
+  @Input() totalCount: number = 0;
 }

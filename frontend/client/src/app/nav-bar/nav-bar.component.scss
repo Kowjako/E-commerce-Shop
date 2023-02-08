@@ -9,3 +9,12 @@
     top:-12px;
     right: 33px;
 }
+
+.menu {
+    transition: color .75s ease;
+    color: black;
+}
+
+.menu:hover {
+    color:rgb(6, 173, 62)
+}

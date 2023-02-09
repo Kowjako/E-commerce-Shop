@@ -16,5 +16,17 @@
 }
 
 .menu:hover {
-    color:rgb(6, 173, 62)
+    color:orange;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    &.active {
+        color: orange;
+    }
+}
+
+.logo {
+    cursor: pointer;
 }

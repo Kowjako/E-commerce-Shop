@@ -37,6 +37,10 @@ export class ShopService {
     });
   }
 
+  getProduct(id: number): Observable<Product> {
+    return this.httpClient.get<Product>(this.baseUrl + "Products/" + id);
+  }
+
   getBrands(): Observable<Brand[]> {
     return this.httpClient.get<Brand[]>(this.baseUrl + "Products/brands");
   }

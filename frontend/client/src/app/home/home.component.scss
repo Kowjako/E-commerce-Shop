@@ -1,0 +1,34 @@
+.featured {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
+}
+
+img {
+    position: relative;
+    object-fit: cover;
+    height: 100vh;
+    width: 100%;
+}
+
+h1 {
+    font-family: 'Caudex', serif;
+    color: white;
+    font-size: 3.65em;
+}
+
+p {
+    text-align: center;
+    //Centering text
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.2em;
+    color: lightgray
+}
+
+button {
+    font-family: 'Caudex', serif;
+    font-size: 1.2em;
+}

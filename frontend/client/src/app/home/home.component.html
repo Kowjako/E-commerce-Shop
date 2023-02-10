@@ -1,1 +1,34 @@
-<p>home works!</p>
+<div>
+    <carousel [isAnimated]="true">
+        <slide>
+            <img src="assets/images/hero1.jpg" alt="first slide" style="display: block; width: 100%;">
+        </slide>
+        <slide>
+            <img src="assets/images/hero2.jpg" alt="second slide" style="display: block; width: 100%;">
+        </slide>
+        <slide>
+            <img src="assets/images/hero3.png" alt="third slide" style="display: block; width: 100%;">
+        </slide>
+        <slide>
+            <img src="assets/images/hero4.jpg" alt="third slide" style="display: block; width: 100%;">
+        </slide>
+        <slide>
+            <img src="assets/images/hero5.jpg" alt="third slide" style="display: block; width: 100%;">
+        </slide>
+    </carousel>
+    <div class="featured d-flex align-items-center justify-content-center">
+        <div class="pt-4 row justify-content-center">
+            <div class="row">
+                <h1 style="text-align: center;">Welcome to Kowjako-Commerce!</h1>
+                <p style="width: 800px">A tall and wide, orange skinned woman with deep, green eyes, angled lips, hollow cheeks and an oval face.
+                    She has wavy, light brown hair, has long eyelashes, wears a subtle foundation, has an artistic tattoo
+                    across her entire left thigh, and she has a burn mark on her right foot. She is sleeping.</p>
+            </div>
+            <div class="row">
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-info px-5" (click)="goToShop()">Let's shop!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

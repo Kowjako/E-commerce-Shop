@@ -7,7 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { ShopModule } from './shop/shop.module';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, data: { breadcrumb: 'Home'} },
   { path: 'test-error', component: TestErrorComponent },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },

@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div class="container mt-1">
     <div *ngIf="(basketService.basketSource$ | async) === null">
         <p>There are no items in your basket</p>
     </div>
@@ -31,17 +31,16 @@
                             <tr *ngFor="let item of basket.items">
                                 <th>
                                     <div class="p-2 d-inline-block">
-                                        <img src="{{item.pictureUrl}}" alt="{{item.productName}}"
-                                         class="image-fluid"
-                                         style="max-height: 50px;">
-                                         <div class="ms-3 d-inline-block align-middle">
+                                        <img src="{{item.pictureUrl}}" alt="{{item.productName}}" class="image-fluid"
+                                            style="max-height: 50px;">
+                                        <div class="ms-3 d-inline-block align-middle">
                                             <h5 class="mb-0 text-dark text-decoration-none">
                                                 {{item.productName}}
                                             </h5>
                                             <span class="text-muted fst-italic">
                                                 Type: {{item.type}}
                                             </span>
-                                         </div>
+                                        </div>
                                     </div>
                                 </th>
                                 <td class="align-middle">
@@ -49,9 +48,13 @@
                                 </td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
-                                        <i class="fa fa-minus-circle text-warning me-2" style="cursor: pointer; font-size: 1.5em;"></i>
+                                        <i class="fa fa-minus-circle text-warning me-2"
+                                            style="cursor: pointer; font-size: 1.5em;"
+                                            (click)="decrementQuantity(item.id, 1)"></i>
                                         <strong style="font-size: 1.35em;">{{item.quantity}}</strong>
-                                        <i class="fa fa-plus-circle text-warning ms-2" style="cursor: pointer; font-size: 1.5em;"></i>
+                                        <i class="fa fa-plus-circle text-warning ms-2"
+                                            style="cursor: pointer; font-size: 1.5em;"
+                                            (click)="incrementQuantity(item)"></i>
                                     </div>
                                 </td>
                                 <td class="align-middle">
@@ -59,12 +62,26 @@
                                 </td>
                                 <td class="align-middle">
                                     <a class="text-danger">
-                                        <i class="fa fa-trash ms-4" style="font-size: 1.5em; cursor: pointer;"></i>
+                                        <i class="fa fa-trash ms-4" style="font-size: 1.5em; cursor: pointer;"
+                                        (click)="decrementQuantity(item.id, item.quantity)"></i>
                                     </a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="container justify-content-center">
+                    <div class="row">
+                        <app-order-totals></app-order-totals>
+                    </div>
+                    <div class="d-grid mb-4 mx-2">
+                        <a routerLink="/checkout" class="btn btn-primary">
+                            Proceed to checkout
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -14,8 +14,8 @@ namespace ShopAPI.Controllers
             _repo = repo;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerBasket>> GetBasketById([FromRoute]string id)
+        [HttpGet]
+        public async Task<ActionResult<CustomerBasket>> GetBasketById([FromQuery]string id)
         {
             var basket = await _repo.GetBasketAsync(id);
             return Ok(basket ?? new CustomerBasket(id));

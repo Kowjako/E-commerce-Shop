@@ -34,8 +34,8 @@
                                         <img src="{{item.pictureUrl}}" alt="{{item.productName}}" class="image-fluid"
                                             style="max-height: 50px;">
                                         <div class="ms-3 d-inline-block align-middle">
-                                            <h5 class="mb-0 text-dark text-decoration-none">
-                                                {{item.productName}}
+                                            <h5 class="mb-0 text-dark">
+                                                <a routerLink="/shop/{{item.id}}" class="text-decoration-none">{{item.productName}}</a>
                                             </h5>
                                             <span class="text-muted fst-italic">
                                                 Type: {{item.type}}

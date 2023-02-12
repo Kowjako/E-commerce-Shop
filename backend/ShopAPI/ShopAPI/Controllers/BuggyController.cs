@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ShopAPI.Controllers
@@ -10,6 +11,13 @@ namespace ShopAPI.Controllers
         public BuggyController(StoreContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("unauthorized")]
+        [Authorize]
+        public ActionResult<string> GetAuth()
+        {
+            return Ok("test");
         }
 
         [HttpGet("notfound")]

@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Interface;
 using Core.Specifications.Concrete;
 using Core.Specifications.Params;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopAPI.DTO;
 using ShopAPI.Errors;

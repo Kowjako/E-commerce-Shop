@@ -14,9 +14,6 @@ namespace ShopAPI.Extensions
         public static IServiceCollection RegisterAppServices(this IServiceCollection services,
             IConfiguration config)
         {
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-
             services.AddDbContext<StoreContext>(p =>
             {
                 p.UseSqlite(config.GetConnectionString("Default"));

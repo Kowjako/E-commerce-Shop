@@ -1,4 +1,7 @@
 ﻿using Core.Entities;
+using Core.Entities.Identity;
+using Infrastructure.Data.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -37,6 +40,30 @@ namespace Infrastructure.Data.SeedData
             }
         }
 
+        public static async Task SeedIdentityAsyncInternal(UserManager<AppUser> userManager)
+        {
+            if (!userManager.Users.Any())
+            {
+                var user = new AppUser()
+                {
+                    DisplayName = "Bob",
+                    Email = "bob@test.com",
+                    UserName = "bob@test.com",
+                    Address = new Address()
+                    {
+                        FirstName = "Bob",
+                        LastName = "Bobbity",
+                        Street = "10 The Street",
+                        City = "New York",
+                        State = "NY",
+                        ZipCode = "90210"
+                    }
+                };
+
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+            }
+        }
+
         public static async Task SeedDataAsync(IServiceScope scope)
         {
             var services = scope.ServiceProvider;
@@ -50,6 +77,18 @@ namespace Infrastructure.Data.SeedData
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occured during migration");
+            }
+
+            var contextIdentity = services.GetRequiredService<AppIdentityDbContext>();
+            var userManager = services.GetRequiredService<UserManager<AppUser>>();
+            try
+            {
+                await contextIdentity.Database.MigrateAsync();
+                await SeedIdentityAsyncInternal(userManager);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occured during identity migraiton");
             }
         }
     }

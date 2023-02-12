@@ -6,6 +6,7 @@ using ShopAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.RegisterAppServices(builder.Configuration);
+builder.Services.ConfigureIdentity(builder.Configuration);
 builder.Services.AddControllers();
 
 
@@ -28,7 +29,10 @@ if (app.Environment.IsDevelopment())
 // PictureUrl are referenced to them
 app.UseStaticFiles();
 app.UseCors("CORS");
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 // Seed DB

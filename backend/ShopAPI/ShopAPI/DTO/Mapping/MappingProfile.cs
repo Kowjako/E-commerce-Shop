@@ -16,6 +16,8 @@ namespace ShopAPI.DTO.Mapping
 
             // map both sides ReverseMap
             CreateMap<Address, AddressDTO>().ReverseMap();
+            CreateMap<CustomerBasketDTO, CustomerBasket>();
+            CreateMap<BasketItemDTO, BasketItem>();
         }
     }
 }

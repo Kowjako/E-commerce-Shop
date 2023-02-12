@@ -47,7 +47,7 @@ namespace ShopAPI.Controllers
         // Or we can turn off inside IdentityServiceExtensions
         // AddIdentityCore -> opt.User.RequireUniqueEmail = false;
         [HttpGet("email-exists")]
-        public async Task<ActionResult<bool>> CheckUserEmailExists([FromQuery]string email)
+        public async Task<ActionResult<bool>> CheckUserEmailExists([FromQuery] string email)
         {
             return await _userMngr.FindByEmailAsync(email) != null;
         }
@@ -67,7 +67,7 @@ namespace ShopAPI.Controllers
 
         [Authorize]
         [HttpPut("address")]
-        public async Task<ActionResult<AddressDTO>> UpdateAddress([FromBody]AddressDTO address)
+        public async Task<ActionResult<AddressDTO>> UpdateAddress([FromBody] AddressDTO address)
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
 
@@ -77,7 +77,7 @@ namespace ShopAPI.Controllers
             user.Address = _mapper.Map<Address>(address);
             var result = await _userMngr.UpdateAsync(user);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return Ok(_mapper.Map<AddressDTO>(user.Address));
             }
@@ -87,7 +87,7 @@ namespace ShopAPI.Controllers
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
-        public async Task<ActionResult<UserDTO>> Login([FromBody]LoginDTO login)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] LoginDTO login)
         {
             var user = await _userMngr.FindByEmailAsync(login.Email);
             if (user == null) return Unauthorized(new ApiResponse(401));
@@ -107,8 +107,19 @@ namespace ShopAPI.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
-        public async Task<ActionResult<UserDTO>> Register([FromBody]RegisterDTO reg)
+        public async Task<ActionResult<UserDTO>> Register([FromBody] RegisterDTO reg)
         {
+            if (await _userMngr.FindByEmailAsync(reg.Email) != null)
+            {
+                return BadRequest(new ApiValidationErrorResponse()
+                {
+                    Errors = new[]
+                    {
+                        "Email address is in use"
+                    }
+                });
+            }
+
             var user = new AppUser
             {
                 DisplayName = reg.DisplayName,

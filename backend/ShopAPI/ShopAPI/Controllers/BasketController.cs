@@ -1,6 +1,8 @@
-﻿using Core.Entities;
+﻿using AutoMapper;
+using Core.Entities;
 using Core.Interface;
 using Microsoft.AspNetCore.Mvc;
+using ShopAPI.DTO;
 
 namespace ShopAPI.Controllers
 {
@@ -8,10 +10,12 @@ namespace ShopAPI.Controllers
     public class BasketController : BaseApiController
     {
         private readonly IBasketRepository _repo;
+        private readonly IMapper _mapper;
 
-        public BasketController(IBasketRepository repo)
+        public BasketController(IBasketRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,9 +26,11 @@ namespace ShopAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerBasket>> UpdateBasket([FromBody]CustomerBasket basket)
+        public async Task<ActionResult<CustomerBasket>> UpdateBasket([FromBody]CustomerBasketDTO basket)
         {
-            var updatedBasket = await _repo.UpdateBasketAsync(basket);
+            var basketEntry = _mapper.Map<CustomerBasket>(basket);
+
+            var updatedBasket = await _repo.UpdateBasketAsync(basketEntry);
             return Ok(updatedBasket);
         }
 

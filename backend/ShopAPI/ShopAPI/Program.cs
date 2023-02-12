@@ -9,7 +9,6 @@ builder.Services.AddControllers();
 builder.Services.RegisterAppServices(builder.Configuration);
 builder.Services.ConfigureIdentity(builder.Configuration);
 
-
 var app = builder.Build();
 
 #endregion
@@ -28,7 +27,7 @@ if (app.Environment.IsDevelopment())
 // Our API will serve images inside wwwroot/images since our Products
 // PictureUrl are referenced to them
 app.UseStaticFiles();
-app.UseCors("CORS");
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -6,9 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using ShopAPI.Errors;
 using StackExchange.Redis;
 using Infrastructure.Services;
-using System.Diagnostics;
-using System.Net.Mime;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ShopAPI.Extensions
 {
@@ -57,11 +54,11 @@ namespace ShopAPI.Extensions
 
             services.AddCors(opt =>
             {
-                opt.AddPolicy("CORS", builder =>
+                opt.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.WithOrigins("https://localhost:4200")
-                           .AllowAnyHeader()
-                           .AllowAnyMethod();
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .WithOrigins("https://localhost:4200");
                 });
             });
 

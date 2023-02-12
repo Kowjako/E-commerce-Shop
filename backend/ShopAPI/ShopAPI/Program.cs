@@ -5,9 +5,9 @@ using ShopAPI.Middlewares;
 #region DI
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
 builder.Services.RegisterAppServices(builder.Configuration);
 builder.Services.ConfigureIdentity(builder.Configuration);
-builder.Services.AddControllers();
 
 
 var app = builder.Build();

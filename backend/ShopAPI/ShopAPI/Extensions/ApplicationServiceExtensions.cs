@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using ShopAPI.Errors;
 using StackExchange.Redis;
 using Infrastructure.Services;
+using System.Diagnostics;
+using System.Net.Mime;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ShopAPI.Extensions
 {
@@ -35,6 +38,8 @@ namespace ShopAPI.Extensions
             services.AddScoped<ITokenService, TokenService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            // It should be always after AddControllers()!!
             services.Configure<ApiBehaviorOptions>(opt =>
             {
                 opt.InvalidModelStateResponseFactory = actionContext =>

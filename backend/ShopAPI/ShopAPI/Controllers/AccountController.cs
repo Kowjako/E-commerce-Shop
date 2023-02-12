@@ -46,8 +46,8 @@ namespace ShopAPI.Controllers
 
         // Or we can turn off inside IdentityServiceExtensions
         // AddIdentityCore -> opt.User.RequireUniqueEmail = false;
-        [HttpGet]
-        public async Task<ActionResult<bool>> CheckEmailExists([FromQuery]string email)
+        [HttpGet("email-exists")]
+        public async Task<ActionResult<bool>> CheckUserEmailExists([FromQuery]string email)
         {
             return await _userMngr.FindByEmailAsync(email) != null;
         }

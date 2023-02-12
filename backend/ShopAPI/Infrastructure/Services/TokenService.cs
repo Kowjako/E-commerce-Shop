@@ -33,7 +33,6 @@ namespace Infrastructure.Services
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = creds,
-                // we add issuer to token, so in DI configuration we should validate jwt issuer
                 Issuer = _config["Token:Issuer"]
             };
 

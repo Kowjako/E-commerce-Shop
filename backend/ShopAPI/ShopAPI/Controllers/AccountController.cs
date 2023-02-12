@@ -1,9 +1,13 @@
-﻿using Core.Entities.Identity;
+﻿using AutoMapper;
+using Core.Entities.Identity;
 using Core.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopAPI.DTO;
 using ShopAPI.Errors;
+using System.Security.Claims;
 
 namespace ShopAPI.Controllers
 {
@@ -12,13 +16,72 @@ namespace ShopAPI.Controllers
         private readonly UserManager<AppUser> _userMngr;
         private readonly SignInManager<AppUser> _signInMngr;
         private readonly ITokenService _tokenSvc;
+        private readonly IMapper _mapper;
 
         public AccountController(UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager, ITokenService tokenService)
+            SignInManager<AppUser> signInManager, ITokenService tokenService, IMapper mapper)
         {
             _userMngr = userManager;
             _signInMngr = signInManager;
             _tokenSvc = tokenService;
+            _mapper = mapper;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserDTO>> GetCurrentUser()
+        {
+            // during generation jwt token we add email claim
+            // so here we have access to authenticated user claims
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var user = await _userMngr.FindByEmailAsync(email);
+
+            return new UserDTO()
+            {
+                Email = user.Email,
+                JwtToken = _tokenSvc.CreateToken(user),
+                DisplayName = user.DisplayName,
+            };
+        }
+
+        // Or we can turn off inside IdentityServiceExtensions
+        // AddIdentityCore -> opt.User.RequireUniqueEmail = false;
+        [HttpGet]
+        public async Task<ActionResult<bool>> CheckEmailExists([FromQuery]string email)
+        {
+            return await _userMngr.FindByEmailAsync(email) != null;
+        }
+
+        [Authorize]
+        [HttpGet("address")]
+        public async Task<ActionResult<AddressDTO>> GetUserAddress()
+        {
+            // we will not have user populated without [Authorize] attribute
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+            var user = await _userMngr.Users.Include(p => p.Address)
+                .FirstOrDefaultAsync(p => p.Email.Equals(email));
+
+            return Ok(_mapper.Map<AddressDTO>(user.Address));
+        }
+
+        [Authorize]
+        [HttpPut("address")]
+        public async Task<ActionResult<AddressDTO>> UpdateAddress([FromBody]AddressDTO address)
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+            var user = await _userMngr.Users.Include(p => p.Address)
+                .FirstOrDefaultAsync(p => p.Email.Equals(email));
+
+            user.Address = _mapper.Map<Address>(address);
+            var result = await _userMngr.UpdateAsync(user);
+
+            if(result.Succeeded)
+            {
+                return Ok(_mapper.Map<AddressDTO>(user.Address));
+            }
+            return BadRequest("Problem updating user");
         }
 
         [HttpPost("login")]

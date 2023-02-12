@@ -20,7 +20,7 @@ namespace ShopAPI.Extensions
 
             services.AddIdentityCore<AppUser>(opt =>
             {
-        
+                
             })
             .AddEntityFrameworkStores<AppIdentityDbContext>()
             .AddSignInManager();

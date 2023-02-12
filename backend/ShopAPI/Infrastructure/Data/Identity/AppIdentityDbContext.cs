@@ -6,6 +6,7 @@ namespace Infrastructure.Data.Identity
 {
     public class AppIdentityDbContext : IdentityDbContext<AppUser>
     {
+        // DbContext<T> because we're registering two separate db contexts
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> opt) 
             : base(opt)
         {

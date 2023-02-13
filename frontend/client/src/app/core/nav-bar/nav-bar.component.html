@@ -3,9 +3,7 @@
     <img src="/assets/images/logo.png" alt="logo" style="max-height: 50px;" class="logo" routerLink="/">
 
     <nav class="my-2 text-uppercase fs-5">
-        <a class="p-2 menu" routerLink="/" 
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a class="p-2 menu" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
         <a class="p-2 menu" routerLink="/shop" routerLinkActive="active">Shop</a>
         <a class="p-2 menu" routerLink="/test-error" routerLinkActive="active">Buggy</a>
     </nav>
@@ -17,7 +15,14 @@
                 {{ getCount(basket.items) }}
             </div>
         </a>
-        <a routerLink="/account/login" class="btn btn-outline-secondary me-2">Login</a>
-        <a routerLink="/account/register" class="btn btn-outline-secondary me-2">Sign Up</a>
+
+        <ng-container *ngIf="(accService.currentUser$ | async) === null">
+            <a routerLink="/account/login" class="btn btn-outline-secondary me-2">Login</a>
+            <a routerLink="/account/register" class="btn btn-outline-secondary me-2">Sign Up</a>
+        </ng-container>
+
+        <ng-container *ngIf="(accService.currentUser$ | async) as user">
+            <p>Welcome, {{ user.displayName }}</p>
+        </ng-container>
     </div>
 </header>

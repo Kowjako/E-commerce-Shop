@@ -18,7 +18,7 @@ export class LoginComponent {
 
   onSubmit() {
     this.accService.login(this.loginForm.value).subscribe({
-      next: user => {
+      next: _ => {
         this.router.navigateByUrl("/shop")
       }
     })

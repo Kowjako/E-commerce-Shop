@@ -4,11 +4,10 @@
       <div class="text-center mb-4">
         <h1 class="mb-3">Welcome</h1>
       </div>
-      
-      <app-text-input [formControl]="$any(loginForm.controls['email'])"
-      [label]="'Email Address'"></app-text-input>
-      <app-text-input [formControl]="$any(loginForm.controls['password'])" [type]="'password'"
-      [label]="'Password'"></app-text-input>
+
+      <app-text-input [formControl]="$any(loginForm.controls['email'])" [label]="'Email Address'"></app-text-input>
+      <app-text-input [formControl]="$any(loginForm.controls['password'])" type="password"
+        label="Password"></app-text-input>
 
       <div class="d-grid">
         <button class="btn btn-lg btn-primary mt-3" type="submit" [disabled]="loginForm.invalid">Sign in</button>

@@ -23,7 +23,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           switch(error.status) {
             case 400: 
               if(error.error.errors) {
-                throw error.error; //throw Validation Error to component
+                throw error.error; //throw Validation Error to component so after subscribe we will have it inside error: err => console.log(err)
               }
               else {
                 this.toastr.error('Requested resource was not found', error.status.toString());

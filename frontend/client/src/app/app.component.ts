@@ -26,6 +26,6 @@ export class AppComponent implements OnInit {
   loadCurrentUser() {
     const token = localStorage.getItem('token');
     // will set BehaviorSubject, and other components subscribed to it
-    if (token) this.accService.loadCurrentUser(token).subscribe();
+    this.accService.loadCurrentUser(token).subscribe();
   }
 }

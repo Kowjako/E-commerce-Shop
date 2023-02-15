@@ -21,7 +21,7 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Pick config from EntityTypeBuilder
+            // Pick config from EntityTypeBuilder (Data/Config)
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             // Since SQLite doesnt support sorting by decimal

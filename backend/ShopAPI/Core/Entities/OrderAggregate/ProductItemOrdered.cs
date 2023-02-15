@@ -1,6 +1,6 @@
 ﻿namespace Core.Entities.OrderAggregate
 {
-    // No id because it will be a part of order row
+    // No id because it will be a part of OrderItem row
     public class ProductItemOrdered
     {
         public ProductItemOrdered() { }

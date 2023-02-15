@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Entities.Identity;
 using ShopAPI.DTO.Mapping.Resolvers;
+using OA = Core.Entities.OrderAggregate;
 
 namespace ShopAPI.DTO.Mapping
 {
@@ -18,6 +19,8 @@ namespace ShopAPI.DTO.Mapping
             CreateMap<Address, AddressDTO>().ReverseMap();
             CreateMap<CustomerBasketDTO, CustomerBasket>();
             CreateMap<BasketItemDTO, BasketItem>();
+
+            CreateMap<AddressDTO, OA.Address>();
         }
     }
 }

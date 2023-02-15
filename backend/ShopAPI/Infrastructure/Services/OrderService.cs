@@ -7,17 +7,12 @@ namespace Infrastructure.Services
     public class OrderService : IOrderService
     {
         private readonly IBasketRepository _basketRepo;
-        private readonly IGenericRepository<Order> _orderRepo;
-        private readonly IGenericRepository<DeliveryMethod> _delMethodRepo;
-        private readonly IGenericRepository<Product> _productRepo;
+        private readonly IUnitOfWork _uow;
 
-        public OrderService(IBasketRepository basketRepo, IGenericRepository<Order> orderRepo,
-            IGenericRepository<DeliveryMethod> delMethodRepo, IGenericRepository<Product> productRepo)
+        public OrderService(IBasketRepository basketRepo, IUnitOfWork uow)
         {
             _basketRepo = basketRepo;
-            _orderRepo = orderRepo;
-            _delMethodRepo = delMethodRepo;
-            _productRepo  = productRepo;
+            _uow = uow;
         }
 
         public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
@@ -27,26 +22,32 @@ namespace Infrastructure.Services
 
             // 2. Get items themselves to check price and create order items
             var items = new List<OrderItem>();
-            foreach(var item in basket.Items)
+            foreach (var item in basket.Items)
             {
-                var productItem = await _productRepo.GetByIdAsync(item.Id);
+                var productItem = await _uow.Repository<Product>().GetByIdAsync(item.Id);
                 var itemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.PictureUrl);
                 var orderItem = new OrderItem(itemOrdered, productItem.Price, item.Quantity);
                 items.Add(orderItem);
             }
 
             // 3. Get delivery Method
-            var delMethod = await _delMethodRepo.GetByIdAsync(deliveryMethodId);
+            var delMethod = await _uow.Repository<DeliveryMethod>().GetByIdAsync(deliveryMethodId);
 
             // 4. Calculate subtotal based on price retrieved from repo
             var subTotal = items.Aggregate(0m, (sum, p) => sum + p.Quantity * p.Price);
 
             // 5. Create order
             var order = new Order(items, buyerEmail, shippingAddress, delMethod, subTotal);
+            _uow.Repository<Order>().Add(order);
 
-            // 6. Save to db (TODO)
+            // 6. Save to db
+            var result = await _uow.Complete();
+            if (result <= 0) return null; 
 
-            // 7. Return brand new order
+            // 7. Delete basket
+            await _basketRepo.DeleteBasketAsync(basketId);
+
+            // 8. Return brand new order
             return order;
         }
 

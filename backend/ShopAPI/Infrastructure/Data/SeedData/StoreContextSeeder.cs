@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Entities.Identity;
+using Core.Entities.OrderAggregate;
 using Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,13 @@ namespace Infrastructure.Data.SeedData
                 context.Products.AddRange(product);
             }
 
+            if (!context.DeliveryMethods.Any())
+            {
+                var deliveryData = File.ReadAllText("../Infrastructure/Data/SeedData/delivery.json");
+                var deliveries = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+                context.DeliveryMethods.AddRange(deliveries);
+            }
+
             if (context.ChangeTracker.HasChanges())
             {
                 await context.SaveChangesAsync();
@@ -49,7 +57,7 @@ namespace Infrastructure.Data.SeedData
                     DisplayName = "Bob",
                     Email = "bob@test.com",
                     UserName = "bob@test.com",
-                    Address = new Address()
+                    Address = new Core.Entities.Identity.Address()
                     {
                         FirstName = "Bob",
                         LastName = "Bobbity",

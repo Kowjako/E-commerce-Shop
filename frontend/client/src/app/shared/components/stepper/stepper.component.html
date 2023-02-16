@@ -6,7 +6,7 @@
                 <button class="nav-link py-3 text-uppercase fw-bold"
                     (click)="onClick(i)"
                     [class.active]="selectedIndex === i">
-                    {{step.label}}
+                    {{step.label}}:{{step.completed}}
                 </button>
             </div>
         </li>

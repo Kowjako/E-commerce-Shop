@@ -5,7 +5,8 @@
              class="form-check-input"
              value="{{m.id}}"
              id="{{m.id}}"
-             formControlName="deliveryMethod">
+             formControlName="deliveryMethod"
+             (click)="setShippingPrice(m)">
             <label for="{{m.id}}" class="ms-2 mb-3">
                 <strong>{{m.shortName}} - {{m.price | currency}}</strong>
                 <br>

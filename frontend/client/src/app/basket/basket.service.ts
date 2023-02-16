@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Basket, BasketItem, BasketTotals } from '../shared/models/basket';
+import { DeliveryMethod } from '../shared/models/deliveryMethod';
 import { Product } from '../shared/models/product';
 
 @Injectable({
@@ -12,11 +13,17 @@ export class BasketService {
   baseUrl = environment.apiUrl;
   private basketSource = new BehaviorSubject<Basket | null>(null);
   basketSource$ = this.basketSource.asObservable();
+  shipping = 0;
 
   private basketTotalSource = new BehaviorSubject<BasketTotals | null>(null);
   basketTotalSource$ = this.basketTotalSource.asObservable();
 
   constructor(private httpClient: HttpClient) { }
+
+  setShippingPrice(deliveryMethod: DeliveryMethod) {
+    this.shipping = deliveryMethod.price;
+    this.calculateTotals();
+  }
 
   getBasket(id: string) {
     return this.httpClient.get<Basket>(this.baseUrl + 'basket?id=' + id).subscribe({
@@ -64,11 +71,15 @@ export class BasketService {
   private deleteBasket(basket: Basket) {
     return this.httpClient.delete(this.baseUrl + 'Basket?id=' + basket.id).subscribe({
       next: () => {
-        this.basketSource.next(null);
-        this.basketTotalSource.next(null);
-        localStorage.removeItem('basket_id')
+        this.deleteLocalBasket();
       }
     })
+  }
+
+  deleteLocalBasket() {
+    this.basketSource.next(null);
+    this.basketTotalSource.next(null);
+    localStorage.removeItem('basket_id')
   }
 
   private createBasket(): Basket {
@@ -104,11 +115,10 @@ export class BasketService {
   private calculateTotals() {
     const basket = this.getCurrentBasketValue();
     if (!basket) return;
-    const shipping = 0;
     const subTotal = basket.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const total = subTotal + shipping;
+    const total = subTotal + this.shipping;
     this.basketTotalSource.next({
-      shipping,
+      shipping: this.shipping,
       total,
       subtotal: subTotal
     })

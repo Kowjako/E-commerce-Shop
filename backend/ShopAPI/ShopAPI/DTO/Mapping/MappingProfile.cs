@@ -23,7 +23,8 @@ namespace ShopAPI.DTO.Mapping
             CreateMap<AddressDTO, OA.Address>();
             CreateMap<OA.Order, OrderToReturnDTO>()
                 .ForMember(p => p.DeliveryMethod, src => src.MapFrom(c => c.DeliveryMethod.ShortName))
-                .ForMember(p => p.ShippingPrice, src => src.MapFrom(c => c.DeliveryMethod.Price));
+                .ForMember(p => p.ShippingPrice, src => src.MapFrom(c => c.DeliveryMethod.Price))
+                .ForMember(p => p.Total, src => src.MapFrom(c => c.SubTotal + c.DeliveryMethod.Price));
             CreateMap<OA.OrderItem, OrderItemDTO>()
                 .ForMember(p => p.ProductId, src => src.MapFrom(c => c.ItemOrdered.ProductItemId))
                 .ForMember(p => p.ProductName, src => src.MapFrom(c => c.ItemOrdered.ProductName))

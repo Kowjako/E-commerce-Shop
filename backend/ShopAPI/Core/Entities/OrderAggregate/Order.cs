@@ -23,10 +23,5 @@
         public decimal SubTotal { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public string PaymentIntentId { get; set; }
-
-        public decimal GetTotal()
-        {
-            return SubTotal + DeliveryMethod.Price;
-        }
     }
 }

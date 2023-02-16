@@ -54,7 +54,7 @@ namespace ShopAPI.Controllers
             return Ok(_mapper.Map<OrderToReturnDTO>(order));
         }
 
-        [AllowAnonymous] // allow to bypass Authorization attribute
+        //[AllowAnonymous] allow to bypass Authorization attribute
         [HttpGet("delivery-methods")]
         public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
         {

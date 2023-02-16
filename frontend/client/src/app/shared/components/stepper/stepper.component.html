@@ -1,4 +1,5 @@
 <div class="container">
+    <!-- Headers of stepper-->
     <ul class="nav nav-pills nav-justified">
         <li class="nav-item" *ngFor="let step of steps; let i = index">
             <div class="d-grid">
@@ -11,6 +12,7 @@
         </li>
     </ul>
 
+    <!-- Content of actual step-->
     <div *ngIf="selected">
         <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
     </div>

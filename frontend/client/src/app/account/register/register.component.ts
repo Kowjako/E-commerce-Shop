@@ -13,7 +13,7 @@ export class RegisterComponent {
   errors: string[] | null = null;
 
   constructor(private fb: FormBuilder, private accService: AccountService,
-    private router: Router) {}
+    private router: Router) { }
 
   passExpression = "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{4,8}$"
 

@@ -8,6 +8,7 @@ import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 import { TestErrorComponent } from './core/test-error/test-error.component';
 import { HomeComponent } from './home/home.component';
+import { OrdersModule } from './orders/orders.module';
 import { ShopModule } from './shop/shop.module';
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'account', loadChildren: () => import('./account/account.module').then(m => AccountModule)},
+  { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => OrdersModule)},
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

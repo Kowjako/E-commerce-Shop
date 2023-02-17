@@ -13,7 +13,9 @@ export class OrderDetailedComponent implements OnInit {
   order?: Order;
 
   constructor(private ordersSvc: OrdersService, private actRoute: ActivatedRoute,
-    private bcService: BreadcrumbService) {}
+    private bcService: BreadcrumbService) {
+      this.bcService.set('@OrderDetailed', ' ');
+  }
 
   ngOnInit(): void {
     this.loadOrder();
@@ -21,11 +23,11 @@ export class OrderDetailedComponent implements OnInit {
 
   private loadOrder() {
     const orderId = this.actRoute.snapshot.paramMap.get("id");
-    if(orderId) {
+    if (orderId) {
       this.ordersSvc.getOrderById(+orderId).subscribe({
         next: order => {
           this.order = order
-          //this.bcService.set("@OrderDetailed", `Order# ${order.id} - ${order.status}`);
+          this.bcService.set("@OrderDetailed", `Order# ${order.id} - ${order.status}`);
         }
       })
     }

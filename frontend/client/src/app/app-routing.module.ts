@@ -24,7 +24,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'account', loadChildren: () => import('./account/account.module').then(m => AccountModule)},
-  { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => OrdersModule)},
+  { 
+    path: 'orders', 
+    loadChildren: () => import('./orders/orders.module').then(m => OrdersModule),
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

@@ -8,5 +8,9 @@
         public CustomerBasket() { }
 
         public CustomerBasket(string id) { Id = id; }
+
+        public int? DeliveryMethodId { get; set; }
+        public string ClientSecret { get; set; }
+        public string PaymentIntentId { get; set; }
     }
 }

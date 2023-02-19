@@ -18,32 +18,37 @@ namespace Infrastructure.Services
             _uow = uow;
             _config = config;
         }
-        
+
         public async Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId)
         {
             StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
             var basket = await _basketRepo.GetBasketAsync(basketId);
 
+            if (basket == null)
+            {
+                return null;
+            }
+
             var shippingPrice = 0m;
-            if(basket.DeliveryMethodId.HasValue)
+            if (basket.DeliveryMethodId.HasValue)
             {
                 var deliveryMethod = await _uow.Repository<DeliveryMethod>().GetByIdAsync(basket.DeliveryMethodId.Value);
                 shippingPrice = deliveryMethod.Price;
             }
 
-            foreach(var item in basket.Items)
+            foreach (var item in basket.Items)
             {
                 var productItem = await _uow.Repository<Core.Entities.Product>().GetByIdAsync(item.Id);
 
                 // we cant trust the client
-                if(item.Price != productItem.Price) item.Price = productItem.Price;
+                if (item.Price != productItem.Price) item.Price = productItem.Price;
             }
 
             var service = new PaymentIntentService();
             PaymentIntent intent;
 
             // If we're creating new payment intent
-            if(string.IsNullOrEmpty(basket.PaymentIntentId))
+            if (string.IsNullOrEmpty(basket.PaymentIntentId))
             {
                 var options = new PaymentIntentCreateOptions()
                 {
@@ -57,7 +62,7 @@ namespace Infrastructure.Services
                 // will decide to change basket content
                 basket.PaymentIntentId = intent.Id;
                 basket.ClientSecret = intent.ClientSecret;
-            } 
+            }
             else
             {
                 // We are updating existing payment intent

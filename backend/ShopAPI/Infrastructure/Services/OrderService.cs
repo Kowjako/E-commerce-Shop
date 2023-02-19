@@ -37,16 +37,26 @@ namespace Infrastructure.Services
             // 4. Calculate subtotal based on price retrieved from repo
             var subTotal = items.Aggregate(0m, (sum, p) => sum + p.Quantity * p.Price);
 
-            // 5. Create order
-            var order = new Order(items, buyerEmail, shippingAddress, delMethod, subTotal);
-            _uow.Repository<Order>().Add(order);
+            // 5. Check if order exists 
+            var spec = new OrderByPaymentIntentIdSpec(basket.PaymentIntentId);
+            var order = await _uow.Repository<Order>().GetEntityWithSpecAsync(spec);
+
+            if (order != null)
+            {
+                order.ShipToAddress = shippingAddress;
+                order.DeliveryMethod = delMethod;
+                order.SubTotal = subTotal;
+                _uow.Repository<Order>().Update(order);
+            }
+            else
+            {
+                order = new Order(items, buyerEmail, shippingAddress, delMethod, subTotal, basket.PaymentIntentId);
+                _uow.Repository<Order>().Add(order);
+            }
 
             // 6. Save to db
             var result = await _uow.Complete();
-            if (result <= 0) return null; 
-
-            // 7. Delete basket
-            await _basketRepo.DeleteBasketAsync(basketId);
+            if (result <= 0) return null;
 
             // 8. Return brand new order
             return order;

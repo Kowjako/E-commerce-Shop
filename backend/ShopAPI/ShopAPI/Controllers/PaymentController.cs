@@ -2,6 +2,7 @@
 using Core.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShopAPI.Errors;
 
 namespace ShopAPI.Controllers
 {
@@ -18,7 +19,12 @@ namespace ShopAPI.Controllers
         [HttpPost("{basketId}")]
         public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId)
         {
-            return await _paymentSvc.CreateOrUpdatePaymentIntent(basketId);
+            var basket = await _paymentSvc.CreateOrUpdatePaymentIntent(basketId);
+            if(basket == null)
+            {
+                return BadRequest(new ApiResponse(400, "Problem with your basket"));
+            }
+            return Ok(basket);
         }
     } 
 }

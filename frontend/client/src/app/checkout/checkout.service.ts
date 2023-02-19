@@ -14,7 +14,6 @@ export class CheckoutService {
   constructor(private httpClient: HttpClient) { }
 
   createOrder(order: OrderToCreate) {
-    console.log('checker')
     return this.httpClient.post<Order>(this.baseUrl + 'order', order)
   }
 

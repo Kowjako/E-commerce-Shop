@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AccountService } from '../account/account.service';
+import { BasketService } from '../basket/basket.service';
 
 @Component({
   selector: 'app-checkout',
@@ -8,10 +9,12 @@ import { AccountService } from '../account/account.service';
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
-  constructor(private fbs: FormBuilder, private accService: AccountService) {}
+  constructor(private fbs: FormBuilder, private accService: AccountService,
+    private basketSvc: BasketService) {}
 
   ngOnInit(): void {
     this.getAddressFormValues();
+    this.getDeliveryMethodValue();
   }
 
   checkoutForm = this.fbs.group({
@@ -37,5 +40,12 @@ export class CheckoutComponent implements OnInit {
         addr && this.checkoutForm.get('addressForm')?.patchValue(addr);
       }
     })
+  }
+
+  getDeliveryMethodValue() {
+    const basket = this.basketSvc.getCurrentBasketValue();
+    if(basket && basket.deliveryMethodId) {
+      this.checkoutForm.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket.deliveryMethodId.toString())
+    }
   }
 }

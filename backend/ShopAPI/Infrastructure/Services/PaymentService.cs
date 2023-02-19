@@ -18,7 +18,7 @@ namespace Infrastructure.Services
             _uow = uow;
             _config = config;
         }
-
+        
         public async Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId)
         {
             StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];

@@ -28,6 +28,10 @@ export class CheckoutPaymentComponent implements OnInit {
   cardErrors: any;
   loading = false;
 
+  cardNumberComplete = false;
+  cardExpiryComplete = false;
+  cardCvcComplete = false;
+
   constructor(private basketService: BasketService, private router: Router,
     private checkoutSvc: CheckoutService, private toastr: ToastrService) { }
 
@@ -39,6 +43,7 @@ export class CheckoutPaymentComponent implements OnInit {
         this.cardNumber = elements.create('cardNumber');
         this.cardNumber.mount(this.cardNumberElement?.nativeElement);
         this.cardNumber.on("change", event => {
+          this.cardNumberComplete = event.complete;
           if(event.error) this.cardErrors = event.error.message;
           else {
             this.cardErrors = null;
@@ -48,6 +53,7 @@ export class CheckoutPaymentComponent implements OnInit {
         this.cardExpiry = elements.create('cardExpiry');
         this.cardExpiry.mount(this.cardExpiryElement?.nativeElement);
         this.cardExpiry.on("change", event => {
+          this.cardExpiryComplete = event.complete
           if(event.error) this.cardErrors = event.error.message;
           else {
             this.cardErrors = null;
@@ -57,6 +63,7 @@ export class CheckoutPaymentComponent implements OnInit {
         this.cardCvc = elements.create('cardCvc');
         this.cardCvc.mount(this.cardCvcElement?.nativeElement);
         this.cardCvc.on("change", event => {
+          this.cardCvcComplete = event.complete
           if(event.error) this.cardErrors = event.error.message;
           else {
             this.cardErrors = null;
@@ -64,6 +71,13 @@ export class CheckoutPaymentComponent implements OnInit {
         })
       }
     })
+  }
+
+  get paymentFormComplete() {
+    return this.checkoutForm?.get('paymentForm')?.valid &&
+      this.cardCvcComplete && 
+      this.cardExpiryComplete &&
+      this.cardCvcComplete
   }
 
   async submitOrder() {

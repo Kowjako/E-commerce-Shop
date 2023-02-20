@@ -25,14 +25,14 @@ namespace ShopAPI.Controllers
         public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId)
         {
             var basket = await _paymentSvc.CreateOrUpdatePaymentIntent(basketId);
-            if(basket == null)
+            if (basket == null)
             {
                 return BadRequest(new ApiResponse(400, "Problem with your basket"));
             }
             return Ok(basket);
         }
 
-        [HttpPost]
+        [HttpPost("webhook")]
         public async Task<ActionResult> StripeWebhook()
         {
             var json = await new StreamReader(Request.Body).ReadToEndAsync();
@@ -41,15 +41,17 @@ namespace ShopAPI.Controllers
             PaymentIntent intent;
             Order order;
 
-            switch(stripeEvent.Type) 
+            switch (stripeEvent.Type)
             {
                 case "payment_intent.succeeded":
                     intent = (PaymentIntent)stripeEvent.Data.Object;
                     _logger.LogInformation("Payment succeeded:", intent.Id);
+                    order = await _paymentSvc.UpdateOrderPaymentSucceeded(intent.Id);
                     break;
                 case "payment_intent.payment_failed":
                     intent = (PaymentIntent)stripeEvent.Data.Object;
                     _logger.LogInformation("Payment failed:", intent.Id);
+                    order = await _paymentSvc.UpdateOrderPaymentFailed(intent.Id);
                     break;
                 default:
                     break;
@@ -57,5 +59,5 @@ namespace ShopAPI.Controllers
 
             return new EmptyResult();
         }
-    } 
+    }
 }

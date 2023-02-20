@@ -79,7 +79,7 @@ export class BasketService {
     }
   }
 
-  private deleteBasket(basket: Basket) {
+  deleteBasket(basket: Basket) {
     return this.httpClient.delete(this.baseUrl + 'Basket?id=' + basket.id).subscribe({
       next: () => {
         this.deleteLocalBasket();

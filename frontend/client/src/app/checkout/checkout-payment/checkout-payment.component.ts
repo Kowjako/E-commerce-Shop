@@ -83,13 +83,15 @@ export class CheckoutPaymentComponent implements OnInit {
   async submitOrder() {
     this.loading = true;
     const basket = this.basketService.getCurrentBasketValue();
+    if(!basket) throw new Error("Cannot get basket");
+
     try {
       // await allow us not to use then with promise
       const createdOrder = await this.createOrder(basket);
       const paymentResult = await this.confirmPaymentWithStripe(basket);
 
       if(paymentResult.paymentIntent) {
-        this.basketService.deleteLocalBasket();
+        this.basketService.deleteBasket(basket);
         const navigationExtras: NavigationExtras = {state: createdOrder}
         this.router.navigate(['checkout/success'], navigationExtras);
       } else {

@@ -78,26 +78,24 @@ namespace Infrastructure.Services
             return basket;
         }
 
-        public async Task<Order> UpdateOrderPaymentFailed(string paymentIntentId)
+        public async Task UpdateOrderPaymentFailed(string paymentIntentId)
         {
             var spec = new OrderByPaymentIntentIdSpec(paymentIntentId);
             var order = await _uow.Repository<Order>().GetEntityWithSpecAsync(spec);
 
-            if (order == null) return null;
+            if (order == null) return;
             order.Status = OrderStatus.PaymentFailed;
             await _uow.Complete();
-            return order;
         }
 
-        public async Task<Order> UpdateOrderPaymentSucceeded(string paymentIntentId)
+        public async Task UpdateOrderPaymentSucceeded(string paymentIntentId)
         {
             var spec = new OrderByPaymentIntentIdSpec(paymentIntentId);
             var order = await _uow.Repository<Order>().GetEntityWithSpecAsync(spec);
 
-            if (order == null) return null;
+            if (order == null) return;
             order.Status = OrderStatus.PaymentReceived;
             await _uow.Complete();
-            return order;
         }
     }
 }

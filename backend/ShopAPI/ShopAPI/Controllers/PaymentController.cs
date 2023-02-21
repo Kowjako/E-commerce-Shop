@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-using Core.Entities.OrderAggregate;
 using Core.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

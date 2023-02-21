@@ -4,11 +4,11 @@ using System.Text.Json;
 
 namespace Infrastructure.Services
 {
-    public class ReponseCacheService : IResponseCacheService
+    public class ResponseCacheService : IResponseCacheService
     {
         private readonly IDatabase _redis;
 
-        public ReponseCacheService(IConnectionMultiplexer redis)
+        public ResponseCacheService(IConnectionMultiplexer redis)
         {
             _redis = redis.GetDatabase();
         }

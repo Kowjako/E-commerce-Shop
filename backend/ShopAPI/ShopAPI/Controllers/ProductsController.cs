@@ -27,6 +27,7 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet]
+        [Cached(600)]
         public async Task<ActionResult<Pagination<ProductDTO>>> GetProducts([FromQuery]ProductsSpecParams @params)
         {
             var products = await _repo.GetAllWithSpecAsync(new ProductsWithTypesAndBrandsSpec(@params));
@@ -46,6 +47,7 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Cached(600)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ApiResponse))]
         public async Task<ActionResult<ProductDTO>> GetProduct([FromRoute] int id)
@@ -61,12 +63,14 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet("brands")]
+        [Cached(600)]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
             return Ok(await _prodBrandRepo.GetAllAsync());
         }
 
         [HttpGet("types")]
+        [Cached(600)]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductTypes()
         {
             return Ok(await _prodTypeRepo.GetAllAsync());
